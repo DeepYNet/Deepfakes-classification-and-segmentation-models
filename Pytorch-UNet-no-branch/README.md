@@ -2,9 +2,14 @@
 
 ## Model Architecture
 
+`Input size (MB): 1.17  
+Forward/backward pass size (MB): 1608.61  
+Params size (MB): 344.48  
+Estimated Total Size (MB): 1954.25  `
+
 ----------------------------------------------------------------
         Layer (type)               Output Shape         Param #
-----------------------------------------------------------------
+        
             Conv2d-1         [-1, 64, 320, 320]           1,792
        BatchNorm2d-2         [-1, 64, 320, 320]             128
               ReLU-3         [-1, 64, 320, 320]               0
@@ -60,7 +65,7 @@
            Linear-53                 [-1, 1024]       2,098,176
            Linear-54                  [-1, 512]         524,800
            Linear-55                    [-1, 1]             513
-  ConvTranspose2d-56          [-1, 512, 40, 40]       2,097,664
+    ConvTranspose2d-56          [-1, 512, 40, 40]       2,097,664
            Conv2d-57          [-1, 512, 40, 40]       4,719,104
       BatchNorm2d-58          [-1, 512, 40, 40]           1,024
              ReLU-59          [-1, 512, 40, 40]               0
@@ -69,7 +74,7 @@
              ReLU-62          [-1, 512, 40, 40]               0
        DoubleConv-63          [-1, 512, 40, 40]               0
                Up-64          [-1, 512, 40, 40]               0
-  ConvTranspose2d-65          [-1, 256, 80, 80]         524,544
+    ConvTranspose2d-65          [-1, 256, 80, 80]         524,544
            Conv2d-66          [-1, 256, 80, 80]       1,179,904
       BatchNorm2d-67          [-1, 256, 80, 80]             512
              ReLU-68          [-1, 256, 80, 80]               0
@@ -78,7 +83,7 @@
              ReLU-71          [-1, 256, 80, 80]               0
        DoubleConv-72          [-1, 256, 80, 80]               0
                Up-73          [-1, 256, 80, 80]               0
-  ConvTranspose2d-74        [-1, 128, 160, 160]         131,200
+    ConvTranspose2d-74        [-1, 128, 160, 160]         131,200
            Conv2d-75        [-1, 128, 160, 160]         295,040
       BatchNorm2d-76        [-1, 128, 160, 160]             256
              ReLU-77        [-1, 128, 160, 160]               0
@@ -87,7 +92,7 @@
              ReLU-80        [-1, 128, 160, 160]               0
        DoubleConv-81        [-1, 128, 160, 160]               0
                Up-82        [-1, 128, 160, 160]               0
-  ConvTranspose2d-83         [-1, 64, 320, 320]          32,832
+    ConvTranspose2d-83         [-1, 64, 320, 320]          32,832
            Conv2d-84         [-1, 64, 320, 320]          73,792
       BatchNorm2d-85         [-1, 64, 320, 320]             128
              ReLU-86         [-1, 64, 320, 320]               0
@@ -98,15 +103,7 @@
                Up-91         [-1, 64, 320, 320]               0
            Conv2d-92          [-1, 2, 320, 320]             130
           OutConv-93          [-1, 2, 320, 320]               0
-
-Total params: 90,302,467
-Trainable params: 90,302,467
-Non-trainable params: 0
-
-Input size (MB): 1.17
-Forward/backward pass size (MB): 1608.61
-Params size (MB): 344.48
-Estimated Total Size (MB): 1954.25
+          
 
 - To get predictions on a frame, put weights from [drive link](https://drive.google.com/drive/folders/1ST3ygCUMGP4tyQz8T7NezUgKFhXt5CRk?usp=sharing) in checkpoints folder and run `fyp_predictions.ipynb`
 
