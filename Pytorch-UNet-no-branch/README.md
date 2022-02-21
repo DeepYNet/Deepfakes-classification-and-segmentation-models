@@ -1,170 +1,113 @@
-https://drive.google.com/drive/folders/1ST3ygCUMGP4tyQz8T7NezUgKFhXt5CRk?usp=sharing
+# Deepfakes classification using U-Net backbone
 
-# U-Net: Semantic segmentation with PyTorch
-<a href="#"><img src="https://img.shields.io/github/workflow/status/milesial/PyTorch-UNet/Publish%20Docker%20image?logo=github&style=for-the-badge" /></a>
-<a href="https://hub.docker.com/r/milesial/unet"><img src="https://img.shields.io/badge/docker%20image-available-blue?logo=Docker&style=for-the-badge" /></a>
-<a href="https://pytorch.org/"><img src="https://img.shields.io/badge/PyTorch-v1.9.0-red.svg?logo=PyTorch&style=for-the-badge" /></a>
-<a href="#"><img src="https://img.shields.io/badge/python-v3.6+-blue.svg?logo=python&style=for-the-badge" /></a>
+## Model Architecture
 
-![input and output for a random image in the test dataset](https://i.imgur.com/GD8FcB7.png)
+----------------------------------------------------------------
+        Layer (type)               Output Shape         Param #
+----------------------------------------------------------------
+            Conv2d-1         [-1, 64, 320, 320]           1,792
+       BatchNorm2d-2         [-1, 64, 320, 320]             128
+              ReLU-3         [-1, 64, 320, 320]               0
+            Conv2d-4         [-1, 64, 320, 320]          36,928
+       BatchNorm2d-5         [-1, 64, 320, 320]             128
+              ReLU-6         [-1, 64, 320, 320]               0
+        DoubleConv-7         [-1, 64, 320, 320]               0
+         MaxPool2d-8         [-1, 64, 160, 160]               0
+            Conv2d-9        [-1, 128, 160, 160]          73,856
+      BatchNorm2d-10        [-1, 128, 160, 160]             256
+             ReLU-11        [-1, 128, 160, 160]               0
+           Conv2d-12        [-1, 128, 160, 160]         147,584
+      BatchNorm2d-13        [-1, 128, 160, 160]             256
+             ReLU-14        [-1, 128, 160, 160]               0
+       DoubleConv-15        [-1, 128, 160, 160]               0
+             Down-16        [-1, 128, 160, 160]               0
+        MaxPool2d-17          [-1, 128, 80, 80]               0
+           Conv2d-18          [-1, 256, 80, 80]         295,168
+      BatchNorm2d-19          [-1, 256, 80, 80]             512
+             ReLU-20          [-1, 256, 80, 80]               0
+           Conv2d-21          [-1, 256, 80, 80]         590,080
+      BatchNorm2d-22          [-1, 256, 80, 80]             512
+             ReLU-23          [-1, 256, 80, 80]               0
+       DoubleConv-24          [-1, 256, 80, 80]               0
+             Down-25          [-1, 256, 80, 80]               0
+        MaxPool2d-26          [-1, 256, 40, 40]               0
+           Conv2d-27          [-1, 512, 40, 40]       1,180,160
+      BatchNorm2d-28          [-1, 512, 40, 40]           1,024
+             ReLU-29          [-1, 512, 40, 40]               0
+           Conv2d-30          [-1, 512, 40, 40]       2,359,808
+      BatchNorm2d-31          [-1, 512, 40, 40]           1,024
+             ReLU-32          [-1, 512, 40, 40]               0
+       DoubleConv-33          [-1, 512, 40, 40]               0
+             Down-34          [-1, 512, 40, 40]               0
+        MaxPool2d-35          [-1, 512, 20, 20]               0
+           Conv2d-36         [-1, 1024, 20, 20]       4,719,616
+      BatchNorm2d-37         [-1, 1024, 20, 20]           2,048
+             ReLU-38         [-1, 1024, 20, 20]               0
+           Conv2d-39         [-1, 1024, 20, 20]       9,438,208
+      BatchNorm2d-40         [-1, 1024, 20, 20]           2,048
+             ReLU-41         [-1, 1024, 20, 20]               0
+       DoubleConv-42         [-1, 1024, 20, 20]               0
+             Down-43         [-1, 1024, 20, 20]               0
+        MaxPool2d-44         [-1, 1024, 10, 10]               0
+           Conv2d-45         [-1, 2048, 10, 10]      18,876,416
+      BatchNorm2d-46         [-1, 2048, 10, 10]           4,096
+             ReLU-47         [-1, 2048, 10, 10]               0
+           Conv2d-48         [-1, 2048, 10, 10]      37,750,784
+      BatchNorm2d-49         [-1, 2048, 10, 10]           4,096
+             ReLU-50         [-1, 2048, 10, 10]               0
+       DoubleConv-51         [-1, 2048, 10, 10]               0
+             Down-52         [-1, 2048, 10, 10]               0
+           Linear-53                 [-1, 1024]       2,098,176
+           Linear-54                  [-1, 512]         524,800
+           Linear-55                    [-1, 1]             513
+  ConvTranspose2d-56          [-1, 512, 40, 40]       2,097,664
+           Conv2d-57          [-1, 512, 40, 40]       4,719,104
+      BatchNorm2d-58          [-1, 512, 40, 40]           1,024
+             ReLU-59          [-1, 512, 40, 40]               0
+           Conv2d-60          [-1, 512, 40, 40]       2,359,808
+      BatchNorm2d-61          [-1, 512, 40, 40]           1,024
+             ReLU-62          [-1, 512, 40, 40]               0
+       DoubleConv-63          [-1, 512, 40, 40]               0
+               Up-64          [-1, 512, 40, 40]               0
+  ConvTranspose2d-65          [-1, 256, 80, 80]         524,544
+           Conv2d-66          [-1, 256, 80, 80]       1,179,904
+      BatchNorm2d-67          [-1, 256, 80, 80]             512
+             ReLU-68          [-1, 256, 80, 80]               0
+           Conv2d-69          [-1, 256, 80, 80]         590,080
+      BatchNorm2d-70          [-1, 256, 80, 80]             512
+             ReLU-71          [-1, 256, 80, 80]               0
+       DoubleConv-72          [-1, 256, 80, 80]               0
+               Up-73          [-1, 256, 80, 80]               0
+  ConvTranspose2d-74        [-1, 128, 160, 160]         131,200
+           Conv2d-75        [-1, 128, 160, 160]         295,040
+      BatchNorm2d-76        [-1, 128, 160, 160]             256
+             ReLU-77        [-1, 128, 160, 160]               0
+           Conv2d-78        [-1, 128, 160, 160]         147,584
+      BatchNorm2d-79        [-1, 128, 160, 160]             256
+             ReLU-80        [-1, 128, 160, 160]               0
+       DoubleConv-81        [-1, 128, 160, 160]               0
+               Up-82        [-1, 128, 160, 160]               0
+  ConvTranspose2d-83         [-1, 64, 320, 320]          32,832
+           Conv2d-84         [-1, 64, 320, 320]          73,792
+      BatchNorm2d-85         [-1, 64, 320, 320]             128
+             ReLU-86         [-1, 64, 320, 320]               0
+           Conv2d-87         [-1, 64, 320, 320]          36,928
+      BatchNorm2d-88         [-1, 64, 320, 320]             128
+             ReLU-89         [-1, 64, 320, 320]               0
+       DoubleConv-90         [-1, 64, 320, 320]               0
+               Up-91         [-1, 64, 320, 320]               0
+           Conv2d-92          [-1, 2, 320, 320]             130
+          OutConv-93          [-1, 2, 320, 320]               0
 
+Total params: 90,302,467
+Trainable params: 90,302,467
+Non-trainable params: 0
 
-Customized implementation of the [U-Net](https://arxiv.org/abs/1505.04597) in PyTorch for Kaggle's [Carvana Image Masking Challenge](https://www.kaggle.com/c/carvana-image-masking-challenge) from high definition images.
+Input size (MB): 1.17
+Forward/backward pass size (MB): 1608.61
+Params size (MB): 344.48
+Estimated Total Size (MB): 1954.25
 
-- [Quick start using Docker](#quick-start-using-docker)
-- [Description](#description)
-- [Usage](#usage)
-  - [Docker](#docker)
-  - [Training](#training)
-  - [Prediction](#prediction)
-- [Weights & Biases](#weights--biases)
-- [Pretrained model](#pretrained-model)
-- [Data](#data)
+- To get predictions on a frame, put weights from [drive link](https://drive.google.com/drive/folders/1ST3ygCUMGP4tyQz8T7NezUgKFhXt5CRk?usp=sharing) in checkpoints folder and run `fyp_predictions.ipynb`
 
-## Quick start using Docker
-
-1. [Install Docker 19.03 or later:](https://docs.docker.com/get-docker/)
-```bash
-curl https://get.docker.com | sh && sudo systemctl --now enable docker
-```
-2. [Install the NVIDIA container toolkit:](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
-```bash
-distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
-   && curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \
-   && curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
-sudo apt-get update
-sudo apt-get install -y nvidia-docker2
-sudo systemctl restart docker
-```
-3. [Download and run the image:](https://hub.docker.com/repository/docker/milesial/unet)
-```bash
-sudo docker run --rm --shm-size=8g --ulimit memlock=-1 --gpus all -it milesial/unet
-```
-
-4. Download the data and run training:
-```bash
-bash scripts/download_data.sh
-python train.py --amp
-```
-
-## Description
-This model was trained from scratch with 5k images and scored a [Dice coefficient](https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient) of 0.988423 on over 100k test images.
-
-It can be easily used for multiclass segmentation, portrait segmentation, medical segmentation, ...
-
-
-## Usage
-**Note : Use Python 3.6 or newer**
-
-### Docker
-
-A docker image containing the code and the dependencies is available on [DockerHub](https://hub.docker.com/repository/docker/milesial/unet).
-You can download and jump in the container with ([docker >=19.03](https://docs.docker.com/get-docker/)):
-
-```console
-docker run -it --rm --shm-size=8g --ulimit memlock=-1 --gpus all milesial/unet
-```
-
-
-### Training
-
-```console
-> python train.py -h
-usage: train.py [-h] [--epochs E] [--batch-size B] [--learning-rate LR]
-                [--load LOAD] [--scale SCALE] [--validation VAL] [--amp]
-
-Train the UNet on images and target masks
-
-optional arguments:
-  -h, --help            show this help message and exit
-  --epochs E, -e E      Number of epochs
-  --batch-size B, -b B  Batch size
-  --learning-rate LR, -l LR
-                        Learning rate
-  --load LOAD, -f LOAD  Load model from a .pth file
-  --scale SCALE, -s SCALE
-                        Downscaling factor of the images
-  --validation VAL, -v VAL
-                        Percent of the data that is used as validation (0-100)
-  --amp                 Use mixed precision
-```
-
-By default, the `scale` is 0.5, so if you wish to obtain better results (but use more memory), set it to 1.
-
-Automatic mixed precision is also available with the `--amp` flag. [Mixed precision](https://arxiv.org/abs/1710.03740) allows the model to use less memory and to be faster on recent GPUs by using FP16 arithmetic. Enabling AMP is recommended.
-
-
-### Prediction
-
-After training your model and saving it to `MODEL.pth`, you can easily test the output masks on your images via the CLI.
-
-To predict a single image and save it:
-
-`python predict.py -i image.jpg -o output.jpg`
-
-To predict a multiple images and show them without saving them:
-
-`python predict.py -i image1.jpg image2.jpg --viz --no-save`
-
-```console
-> python predict.py -h
-usage: predict.py [-h] [--model FILE] --input INPUT [INPUT ...] 
-                  [--output INPUT [INPUT ...]] [--viz] [--no-save]
-                  [--mask-threshold MASK_THRESHOLD] [--scale SCALE]
-
-Predict masks from input images
-
-optional arguments:
-  -h, --help            show this help message and exit
-  --model FILE, -m FILE
-                        Specify the file in which the model is stored
-  --input INPUT [INPUT ...], -i INPUT [INPUT ...]
-                        Filenames of input images
-  --output INPUT [INPUT ...], -o INPUT [INPUT ...]
-                        Filenames of output images
-  --viz, -v             Visualize the images as they are processed
-  --no-save, -n         Do not save the output masks
-  --mask-threshold MASK_THRESHOLD, -t MASK_THRESHOLD
-                        Minimum probability value to consider a mask pixel white
-  --scale SCALE, -s SCALE
-                        Scale factor for the input images
-```
-You can specify which model file to use with `--model MODEL.pth`.
-
-## Weights & Biases
-
-The training progress can be visualized in real-time using [Weights & Biases](https://wandb.ai/).  Loss curves, validation curves, weights and gradient histograms, as well as predicted masks are logged to the platform.
-
-When launching a training, a link will be printed in the console. Click on it to go to your dashboard. If you have an existing W&B account, you can link it
- by setting the `WANDB_API_KEY` environment variable.
-
-
-## Pretrained model
-A [pretrained model](https://github.com/milesial/Pytorch-UNet/releases/tag/v2.0) is available for the Carvana dataset. It can also be loaded from torch.hub:
-
-```python
-net = torch.hub.load('milesial/Pytorch-UNet', 'unet_carvana', pretrained=True)
-```
-The training was done with a 50% scale and bilinear upsampling.
-
-## Data
-The Carvana data is available on the [Kaggle website](https://www.kaggle.com/c/carvana-image-masking-challenge/data).
-
-You can also download it using the helper script:
-
-```
-bash scripts/download_data.sh
-```
-
-The input images and target masks should be in the `data/imgs` and `data/masks` folders respectively. For Carvana, images are RGB and masks are black and white.
-
-You can use your own dataset as long as you make sure it is loaded properly in `utils/data_loading.py`.
-
-
----
-
-Original paper by Olaf Ronneberger, Philipp Fischer, Thomas Brox:
-
-[U-Net: Convolutional Networks for Biomedical Image Segmentation](https://arxiv.org/abs/1505.04597)
-
-![network architecture](https://i.imgur.com/jeDVpqF.png)
+- To get accuracy of the model, put weights from [drive link](https://drive.google.com/drive/folders/1ST3ygCUMGP4tyQz8T7NezUgKFhXt5CRk?usp=sharing) in checkpoints folder and run `fyp_results.py`
